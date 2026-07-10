@@ -1,0 +1,24 @@
+{
+    "name": "sistema/dev",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Sistema\\dev\\": "src/"
+        },
+        "files": [
+            "configure.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Victor-miguel-rodrigues",
+            "email": "vitinhomiguel80@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "pecee/simple-router": "dev-master",
+        "vlucas/phpdotenv": "^5.6@dev"
+    }
+}
