@@ -15,7 +15,7 @@ class Controlador
 
     public function index()
     {
-        echo 'rota index funcionando';
+        print_r(Response::response());
     }
 
 
@@ -33,20 +33,34 @@ class Controlador
             switch ($statusCode) {
                 case 400: {
                     echo 'error  data is empty';
-                    print_r(self::$produtService);
                     break;
                 }
                 case 401: {
                     echo "Rule mod or admin necessario";
                 }
                 default: {
-                    echo 'erro fim';
+                    echo 'erro code http is not a valid';
                     break;
                 }
             }
         }
 
+    }
 
+
+    public function alter_produt(int $id)
+    {
+        try {
+            $body = Request::body();
+            $userService = ProdutService::alter_product($body, $id);
+            print_r($userService);
+        } catch (Exception $e) {
+            $http_code = http_response_code();
+
+            switch($http_code){
+                   case 400: { echo "Data is not ";}
+            }
+        }
     }
 
 }
