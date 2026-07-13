@@ -4,6 +4,7 @@ namespace Sistema\dev\model;
 
 use Exception;
 use Sistema\dev\configuration\Configure;
+use PDOException;
 
 class ProdutModel
 {
@@ -55,18 +56,66 @@ class ProdutModel
     public static function put(array $dados, $id)
     {
         self::$instancia = Configure::getInstancia();
-        try{
+        try {
             $dados = array_filter($dados, fn($dado) => $dado != null);
             $stmt = self::$instancia->query("SELECT * FROM   produtos WHERE id = {$id}");
             $stmt->execute();
-        }catch(Exception $e){
-            echo "adasda";
+        } catch (Exception $e) {
+
         }
 
         if ($stmt->rowCount() > 0) {
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        }else{
-             return http_response_code(400);
+            $db_dados = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+
+            foreach ($db_dados as $dado) {
+                if (!empty($dados['nome'])) {
+                    if ($dado['nome'] != $dados['nome']) {
+                        self::alter_db(self::$instancia, $id, 'nome', $dados['nome']);
+                    }
+                }
+                if (!empty($dados['categoria'])) {
+                    if ($dado['categoria'] != $dados['categoria']) {
+                        self::alter_db(self::$instancia, $id, 'categoria', $dados['categoria']);
+                    }
+                }
+                if (!empty($dados['descricao'])) {
+                    if ($dado['descricao'] != $dados['descricao']) {
+                        self::alter_db(self::$instancia, $id, 'descricao', $dados['descricao']);
+                    }
+                }
+                if (!empty($dados['valor'])) {
+                    if ($dado['valor_compra'] != $dados['valor']) {
+                        self::alter_db(self::$instancia, $id, 'valor_compra', $dados['valor']);
+                    }
+                }
+                if (!empty($dados['qtd_atual'])) {
+                    if ($dado['qtd_atual'] != $dados['qtd_atual']) {
+                        self::alter_db(self::$instancia, $id, 'qtd_atual', $dados['qtd_atual']);
+                    }
+                }
+                if (!empty($dados['preco'])) {
+                    if ($dado['preco_venda'] != $dados['preco']) {
+                        self::alter_db(self::$instancia, $id, 'preco_venda', $dados['preco']);
+                    }
+                }
+            }
+
+        } else {
+            return http_response_code(400);
         }
     }
+
+
+    public static function alter_db($instancia, int $id, $dado, $novo_dado)
+    {
+        try {
+            $stmt = $instancia->query("UPDATE  produtos set   $dado = '$novo_dado'    where id = $id ");
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo $e;
+        }
+
+    }
+
 }
