@@ -118,4 +118,21 @@ class ProdutModel
 
     }
 
+
+
+    public static function delete($id)
+    {
+        self::$instancia = Configure::getInstancia();
+        try {
+            $dados = self::$instancia->prepare("DELETE FROM produtos where id = ? ");
+            $dados->execute([$id]);
+
+            if ($dados->rowCount() > 0) {
+                return http_response_code(201);
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
 }

@@ -63,4 +63,12 @@ class Controlador
         }
     }
 
+
+    public function delet_produt($id){
+                try{
+                       Response::response_delete($id);
+                }catch(Exception $e){
+                        echo $e->getMessage();
+                }
+    }
 }

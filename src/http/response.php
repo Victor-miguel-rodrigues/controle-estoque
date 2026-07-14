@@ -19,5 +19,14 @@ class Response
         return json_encode($json);
     }
 
-    
+    public static function response_delete($id){
+         $rest = ProdutModel::delete($id);
+
+          return   "{
+                'delete' => true,
+                'message' => true,
+                'rest' => [$rest]
+         }";
+
+    }
 }
